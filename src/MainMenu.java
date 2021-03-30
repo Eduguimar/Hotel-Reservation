@@ -3,7 +3,6 @@ import model.Customer;
 import model.IRoom;
 import model.Reservation;
 
-import javax.swing.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Collection;
@@ -14,11 +13,12 @@ public class MainMenu {
     Scanner input;
     HotelResource hotelResource = HotelResource.getInstance();
 
-    public MainMenu(Scanner input) {
-        this.input = input;
+    public MainMenu() {
+        this.input = new Scanner(System.in);
     }
 
     private void findAndReserveARoom() throws ParseException {
+        input.nextLine();
         System.out.println("Enter CheckIn Date mm/dd/yyyy:");
         Date checkInDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
         System.out.println("Enter CheckOut Date mm/dd/yyyy:");
@@ -61,6 +61,7 @@ public class MainMenu {
     }
 
     private void seeMyReservations() {
+        input.nextLine();
         System.out.println("Enter your email:");
         String email = input.nextLine();
         Collection<Reservation> reservations = hotelResource.getCustomersReservations(email);
@@ -70,6 +71,7 @@ public class MainMenu {
     }
 
     private void createAccount() {
+        input.nextLine();
         System.out.println("Enter Email:");
         String email = input.nextLine();
         System.out.println("First Name:");
@@ -79,8 +81,9 @@ public class MainMenu {
         hotelResource.createACustomer(email, firstName, lastName);
     }
 
-    public void mainMenu() throws ParseException {
-        do {
+    public void start() throws ParseException {
+        boolean quit = false;
+        while (!quit) {
             System.out.println("Welcome to the Hotel Reservation Application");
             System.out.println("____________________________________________");
             System.out.println("1. Find and reserve a room");
@@ -90,7 +93,6 @@ public class MainMenu {
             System.out.println("5. Exit");
             System.out.println("____________________________________________");
             System.out.println("Please select a number for the menu option");
-
             switch (input.nextInt()) {
                 case 1:
                     findAndReserveARoom();
@@ -102,12 +104,15 @@ public class MainMenu {
                     createAccount();
                     break;
                 case 4:
+                    AdminMenu adminMenu = new AdminMenu();
+                    adminMenu.start();
                     break;
                 case 5:
+                    quit = true;
                     break;
                 default:
                     System.out.println("Invalid Input!");
             }
-        } while (input.nextInt() != 5);
+        }
     }
 }
