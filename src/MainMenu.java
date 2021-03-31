@@ -18,6 +18,8 @@ public class MainMenu {
     }
 
     private void findAndReserveARoom() throws ParseException {
+        String book;
+        String account;
         input.nextLine();
         System.out.println("Enter CheckIn Date mm/dd/yyyy:");
         Date checkInDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
@@ -25,35 +27,34 @@ public class MainMenu {
         Date checkOutDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
         Collection<IRoom> rooms = hotelResource.findARoom(checkInDate, checkOutDate);
         if (!rooms.isEmpty()) {
-            System.out.println("Would you like to book a room? y/n");
-            char book = input.next().trim().charAt(0);
-            if (book == 'y') {
-                System.out.println("Do you have an account with us? y/n");
-                char account = input.next().trim().charAt(0);
-                if (account == 'y') {
-                    System.out.println("Enter Email format: name@domain.com");
-                    String email = input.nextLine();
-                    Customer customer = hotelResource.getCustomer(email);
-                    System.out.println("What room number would you like to reserve?");
-                    String roomNumber = input.nextLine();
-                    for (IRoom room : rooms) {
-                        if (room.getRoomNumber().equals(roomNumber)) {
+            do {
+                System.out.println("Would you like to book a room? y/n");
+                book = input.next().toLowerCase().trim();
+                if (book.equals("y")) {
+                    do {
+                        System.out.println("Do you have an account with us? y/n");
+                        account = input.next().toLowerCase().trim();
+                        if (account.equals("y")) {
+                            System.out.println("Enter Email format: name@domain.com");
+                            String email = input.nextLine();
+                            Customer customer = hotelResource.getCustomer(email);
+                            System.out.println("What room number would you like to reserve?");
+                            String roomNumber = input.nextLine();
+                            IRoom room = hotelResource.getRoom(roomNumber);
                             hotelResource.bookARoom(customer.getEmail(), room, checkInDate, checkOutDate);
+                        } else if (account.equals("n")){
+                            System.out.println("You have to create an account");
+                            this.createAccount();
+                        } else {
+                            System.out.println("Invalid input!");
                         }
-                    }
-                } else if (account == 'n'){
-                    System.out.println("You have to create an account");
-                    this.createAccount();
+                    } while (!account.equals("y") && !account.equals("n"));
+                } else if (book.equals("n")) {
+                        this.start();
                 } else {
                     System.out.println("Invalid input!");
-                    return;
                 }
-            } else if (book == 'n') {
-                return;
-            } else {
-                System.out.println("Invalid input!");
-                return;
-            }
+            } while (!book.equals("y") && !book.equals("n"));
         } else {
             System.out.println("There is no room available");
             return;
@@ -83,36 +84,40 @@ public class MainMenu {
 
     public void start() throws ParseException {
         boolean quit = false;
+        String i;
         while (!quit) {
-            System.out.println("Welcome to the Hotel Reservation Application");
-            System.out.println("____________________________________________");
-            System.out.println("1. Find and reserve a room");
-            System.out.println("2. See my reservations");
-            System.out.println("3. Create an account");
-            System.out.println("4. Admin");
-            System.out.println("5. Exit");
-            System.out.println("____________________________________________");
-            System.out.println("Please select a number for the menu option");
-            switch (input.nextInt()) {
-                case 1:
-                    findAndReserveARoom();
-                    break;
-                case 2:
-                    seeMyReservations();
-                    break;
-                case 3:
-                    createAccount();
-                    break;
-                case 4:
-                    AdminMenu adminMenu = new AdminMenu();
-                    adminMenu.start();
-                    break;
-                case 5:
-                    quit = true;
-                    break;
-                default:
-                    System.out.println("Invalid Input!");
-            }
+            do {
+                System.out.println("Welcome to the Hotel Reservation Application");
+                System.out.println("____________________________________________");
+                System.out.println("1. Find and reserve a room");
+                System.out.println("2. See my reservations");
+                System.out.println("3. Create an account");
+                System.out.println("4. Admin");
+                System.out.println("5. Exit");
+                System.out.println("____________________________________________");
+                System.out.println("Please select a number for the menu option");
+                i = input.next().trim();
+                switch (i) {
+                    case "1":
+                        findAndReserveARoom();
+                        break;
+                    case "2":
+                        seeMyReservations();
+                        break;
+                    case "3":
+                        createAccount();
+                        break;
+                    case "4":
+                        AdminMenu adminMenu = new AdminMenu();
+                        adminMenu.start();
+                        break;
+                    case "5":
+                        quit = true;
+                        break;
+                    default:
+                        System.out.println("Invalid Input");
+                }
+            } while (!i.equals("1") && !i.equals("2") && !i.equals("3") && !i.equals("4") && !i.equals("5") && quit != true);
         }
     }
 }

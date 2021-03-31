@@ -71,6 +71,10 @@ public class ReservationService {
     }
 
     public void printAllReservations() {
-        System.out.println(reservations);
+        if (!reservations.isEmpty()) {
+            System.out.println(reservations);
+        } else {
+            System.out.println("There is no reservations yet");
+        }
     }
 }

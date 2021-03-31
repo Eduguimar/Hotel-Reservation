@@ -24,8 +24,12 @@ public class CustomerService {
     }
 
     public Customer getCustomer(String customerEmail) {
-        Optional<Customer> customer = customers.stream().filter(c -> customerEmail.equals(c.getEmail())).findFirst();
-        return customer.orElse(null);
+        for (Customer customer : customers) {
+            if (customer.getEmail().equals(customerEmail)) {
+                return customer;
+            }
+        }
+        return null;
     }
 
     public Collection<Customer> getAllCustomers() {

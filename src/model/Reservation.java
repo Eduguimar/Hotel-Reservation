@@ -48,8 +48,8 @@ public class Reservation {
     }
 
     public String toString() {
-        return "Thanks for your registration " + getCustomer().firstName + "\nRoom: " + getRoom().getRoomNumber()
-                + "\nCheck In Date: " + getCheckInDate() + "\nCheck Out Date: " + getCheckOutDate();
+        return "Customer: " + getCustomer().firstName + "\nRoom: " + getRoom().getRoomNumber()
+                + "\nCheck In Date: " + getCheckInDate() + "\nCheck Out Date: " + getCheckOutDate() + "\n";
     }
 
 }

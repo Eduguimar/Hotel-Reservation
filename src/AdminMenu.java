@@ -20,15 +20,23 @@ public class AdminMenu {
 
     private void seeAllCustomers() {
         Collection<Customer> customers = adminResource.getAllCustomers();
-        for (Customer customer : customers) {
-            System.out.println(customer.toString());
+        if (!customers.isEmpty()) {
+            for (Customer customer : customers) {
+                System.out.println(customer.toString());
+            }
+        } else {
+            System.out.println("There is no customers yet");
         }
     }
 
     private void seeAllRooms() {
         Collection<IRoom> rooms = adminResource.getAllRooms();
-        for (IRoom room : rooms) {
-            System.out.println(room.toString());
+        if (!rooms.isEmpty()) {
+            for (IRoom room : rooms) {
+                System.out.println(room.toString());
+            }
+        } else {
+            System.out.println("There is no rooms yet");
         }
     }
 
@@ -41,6 +49,7 @@ public class AdminMenu {
         Integer type;
         do {
             RoomType roomType = null;
+            Boolean isFree = true;
             input.nextLine();
             System.out.println("Enter room number:");
             String roomNumber = input.nextLine();
@@ -57,7 +66,7 @@ public class AdminMenu {
                     System.out.println("Invalid input");
                 }
             } while (type != 1 && type != 2);
-            IRoom room = new Room(roomNumber, roomPrice, roomType);
+            IRoom room = new Room(roomNumber, roomPrice, roomType, isFree);
             List<IRoom> rooms = new ArrayList<>();
             rooms.add(room);
             adminResource.addRoom(rooms);
@@ -71,41 +80,44 @@ public class AdminMenu {
 
     public void start() throws ParseException {
         boolean quit = false;
+        String i;
         while (!quit) {
-            System.out.println("Admin Menu");
-            System.out.println("____________________________________________");
-            System.out.println("1. See all Customers");
-            System.out.println("2. See all Rooms");
-            System.out.println("3. See all Reservations");
-            System.out.println("4. Add a Room");
-            System.out.println("5. Add Test Data");
-            System.out.println("6. Back to Main Menu");
-            System.out.println("____________________________________________");
-            System.out.println("Please select a number for the menu option");
-
-            switch (input.nextInt()) {
-                case 1:
-                    seeAllCustomers();
-                    break;
-                case 2:
-                    seeAllRooms();
-                    break;
-                case 3:
-                    seeAllReservations();
-                    break;
-                case 4:
-                    addARoom();
-                    break;
-                case 5:
-                    quit = true;
-                    break;
-                case 6:
-                    MainMenu mainMenu = new MainMenu();
-                    mainMenu.start();
-                    break;
-                default:
-                    System.out.println("Invalid input");
-            }
+            do {
+                System.out.println("Admin Menu");
+                System.out.println("____________________________________________");
+                System.out.println("1. See all Customers");
+                System.out.println("2. See all Rooms");
+                System.out.println("3. See all Reservations");
+                System.out.println("4. Add a Room");
+                System.out.println("5. Add Test Data");
+                System.out.println("6. Back to Main Menu");
+                System.out.println("____________________________________________");
+                System.out.println("Please select a number for the menu option");
+                i = input.next().trim();
+                switch (i) {
+                    case "1":
+                        seeAllCustomers();
+                        break;
+                    case "2":
+                        seeAllRooms();
+                        break;
+                    case "3":
+                        seeAllReservations();
+                        break;
+                    case "4":
+                        addARoom();
+                        break;
+                    case "5":
+                        quit = true;
+                        break;
+                    case "6":
+                        MainMenu mainMenu = new MainMenu();
+                        mainMenu.start();
+                        break;
+                    default:
+                        System.out.println("Invalid input");
+                }
+            } while (!i.equals("1") && !i.equals("2") && !i.equals("3") && !i.equals("4") && !i.equals("5") && !i.equals("6") && quit != true);
         }
     }
 }
