@@ -6,7 +6,7 @@ import java.util.*;
 
 public class CustomerService {
     private static CustomerService customerService = null;
-    private Collection<Customer> customers;
+    private static Collection<Customer> customers;
 
     private CustomerService() {
         this.customers = new ArrayList<>();
@@ -19,11 +19,11 @@ public class CustomerService {
         return customerService;
     }
 
-    public void addCustomer(String email, String firstName, String lastName) throws IllegalArgumentException {
+    public static void addCustomer(String email, String firstName, String lastName) throws IllegalArgumentException {
         customers.add(new Customer(firstName, lastName, email));
     }
 
-    public Customer getCustomer(String customerEmail) {
+    public static Customer getCustomer(String customerEmail) {
         for (Customer customer : customers) {
             if (customer.getEmail().equals(customerEmail)) {
                 return customer;
@@ -32,7 +32,7 @@ public class CustomerService {
         return null;
     }
 
-    public Collection<Customer> getAllCustomers() {
+    public static Collection<Customer> getAllCustomers() {
         return customers;
     }
 }

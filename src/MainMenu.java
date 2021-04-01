@@ -10,14 +10,13 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class MainMenu {
-    final Scanner input;
-    HotelResource hotelResource = HotelResource.getInstance();
+    static final Scanner input = new Scanner(System.in);;
+    static HotelResource hotelResource = HotelResource.getInstance();
 
     public MainMenu() {
-        this.input = new Scanner(System.in);
     }
 
-    private void findAndReserveARoom() {
+    private static void findAndReserveARoom() {
         String book;
         String account;
         input.nextLine();
@@ -45,13 +44,13 @@ public class MainMenu {
                                 hotelResource.bookARoom(customer.getEmail(), room, checkInDate, checkOutDate);
                             } else if (account.equals("n")){
                                 System.out.println("You have to create an account");
-                                this.createAccount();
+                                createAccount();
                             } else {
                                 System.out.println("Invalid input!");
                             }
                         } while (!account.equals("y") && !account.equals("n"));
                     } else if (book.equals("n")) {
-                        this.start();
+                        start();
                     } else {
                         System.out.println("Invalid input!");
                     }
@@ -65,7 +64,7 @@ public class MainMenu {
         }
     }
 
-    private void seeMyReservations() {
+    private static void seeMyReservations() {
         input.nextLine();
         System.out.println("Enter your email:");
         String email = input.nextLine();
@@ -75,7 +74,7 @@ public class MainMenu {
         }
     }
 
-    private void createAccount() {
+    private static void createAccount() {
         input.nextLine();
         System.out.println("Enter Email:");
         String email = input.nextLine();
@@ -86,7 +85,7 @@ public class MainMenu {
         hotelResource.createACustomer(email, firstName, lastName);
     }
 
-    public void start() throws ParseException {
+    public static void start() throws ParseException {
         boolean quit = false;
         String i;
         while (!quit) {

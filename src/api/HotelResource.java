@@ -11,8 +11,8 @@ import java.util.Date;
 
 public class HotelResource {
     private static HotelResource hotelResource = null;
-    CustomerService customerService = CustomerService.getInstance();
-    ReservationService reservationService = ReservationService.getInstance();
+    static CustomerService customerService = CustomerService.getInstance();
+    static ReservationService reservationService = ReservationService.getInstance();
 
     private HotelResource() { }
 
@@ -23,29 +23,29 @@ public class HotelResource {
         return hotelResource;
     }
 
-    public Customer getCustomer(String email) {
+    public static Customer getCustomer(String email) {
         return customerService.getCustomer(email);
     }
 
-    public void createACustomer(String email, String firstName, String lastName) {
+    public static void createACustomer(String email, String firstName, String lastName) {
         customerService.addCustomer(email, firstName, lastName);
     }
 
-    public IRoom getRoom(String roomNumber) {
+    public static IRoom getRoom(String roomNumber) {
         return reservationService.getARoom(roomNumber);
     }
 
-    public Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
+    public static Reservation bookARoom(String customerEmail, IRoom room, Date checkInDate, Date checkOutDate) {
         Customer customer = customerService.getCustomer(customerEmail);
         return reservationService.reserveARoom(customer, room, checkInDate, checkOutDate);
     }
 
-    public Collection<Reservation> getCustomersReservations(String customerEmail) {
+    public static Collection<Reservation> getCustomersReservations(String customerEmail) {
         Customer customer = customerService.getCustomer(customerEmail);
         return reservationService.getCustomersReservation(customer);
     }
 
-    public Collection<IRoom> findARoom(Date checkIn, Date checkOut) {
+    public static Collection<IRoom> findARoom(Date checkIn, Date checkOut) {
         return reservationService.findRooms(checkIn, checkOut);
     }
 }

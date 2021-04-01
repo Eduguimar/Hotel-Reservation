@@ -6,8 +6,8 @@ import java.util.*;
 
 public class ReservationService {
     private static ReservationService reservationService = null;
-    Collection<IRoom> rooms;
-    Collection<Reservation> reservations;
+    static Set<IRoom> rooms;
+    static Set<Reservation> reservations;
 
     private ReservationService(){
         this.rooms = new HashSet<>();
@@ -21,11 +21,11 @@ public class ReservationService {
         return reservationService;
     }
 
-    public void addRoom(IRoom room) {
+    public static void addRoom(IRoom room) {
         rooms.add(room);
     }
 
-    public IRoom getARoom(String roomId) {
+    public static IRoom getARoom(String roomId) {
         for (IRoom room: rooms) {
             if (room.getRoomNumber().equals(roomId)) {
                 return room;
@@ -34,13 +34,13 @@ public class ReservationService {
         return null;
     }
 
-    public Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
+    public static Reservation reserveARoom(Customer customer, IRoom room, Date checkInDate, Date checkOutDate) {
         Reservation reservation = new Reservation(customer, room, checkInDate, checkOutDate);
         reservations.add(reservation);
         return reservation;
     }
 
-    public Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
+    public static Collection<IRoom> findRooms(Date checkInDate, Date checkOutDate) {
         List<IRoom> availableRooms = new ArrayList<>();
 
         for (Reservation reservation : reservations) {
@@ -56,11 +56,11 @@ public class ReservationService {
         return availableRooms;
     }
 
-    public Collection<IRoom> getAllRooms() {
+    public static Collection<IRoom> getAllRooms() {
         return rooms;
     }
 
-    public Collection<Reservation> getCustomersReservation(Customer customer) {
+    public static Collection<Reservation> getCustomersReservation(Customer customer) {
         List<Reservation> reservationsByCustomer = new ArrayList<>();
         for (Reservation reservation : reservations) {
             if (reservation.getCustomer().equals(customer)) {
@@ -70,7 +70,7 @@ public class ReservationService {
         return reservationsByCustomer;
     }
 
-    public void printAllReservations() {
+    public static void printAllReservations() {
         if (!reservations.isEmpty()) {
             System.out.println(reservations);
         } else {

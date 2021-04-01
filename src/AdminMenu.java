@@ -11,14 +11,13 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
-    final Scanner input;
+    static final Scanner input = new Scanner(System.in);
     static AdminResource adminResource = AdminResource.getInstance();
 
     public AdminMenu() {
-        this.input = new Scanner(System.in);
     }
 
-    private void seeAllCustomers() {
+    private static void seeAllCustomers() {
         Collection<Customer> customers = adminResource.getAllCustomers();
         if (!customers.isEmpty()) {
             for (Customer customer : customers) {
@@ -29,7 +28,7 @@ public class AdminMenu {
         }
     }
 
-    private void seeAllRooms() {
+    private static void seeAllRooms() {
         Collection<IRoom> rooms = adminResource.getAllRooms();
         if (!rooms.isEmpty()) {
             for (IRoom room : rooms) {
@@ -40,11 +39,11 @@ public class AdminMenu {
         }
     }
 
-    private void seeAllReservations() {
+    private static void seeAllReservations() {
         adminResource.displayAllReservations();
     }
 
-    private void addARoom() {
+    private static void addARoom() {
         String addRoom;
         Integer type;
         do {
@@ -78,7 +77,7 @@ public class AdminMenu {
 
     }
 
-    public void start() throws ParseException {
+    public static void start() throws ParseException {
         boolean quit = false;
         String i;
         while (!quit) {
