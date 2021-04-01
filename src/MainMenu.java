@@ -10,54 +10,58 @@ import java.util.Date;
 import java.util.Scanner;
 
 public class MainMenu {
-    Scanner input;
+    final Scanner input;
     HotelResource hotelResource = HotelResource.getInstance();
 
     public MainMenu() {
         this.input = new Scanner(System.in);
     }
 
-    private void findAndReserveARoom() throws ParseException {
+    private void findAndReserveARoom() {
         String book;
         String account;
         input.nextLine();
-        System.out.println("Enter CheckIn Date mm/dd/yyyy:");
-        Date checkInDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
-        System.out.println("Enter CheckOut Date mm/dd/yyyy:");
-        Date checkOutDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
-        Collection<IRoom> rooms = hotelResource.findARoom(checkInDate, checkOutDate);
-        if (!rooms.isEmpty()) {
-            do {
-                System.out.println("Would you like to book a room? y/n");
-                book = input.next().toLowerCase().trim();
-                if (book.equals("y")) {
-                    do {
-                        System.out.println("Do you have an account with us? y/n");
-                        account = input.next().toLowerCase().trim();
-                        if (account.equals("y")) {
-                            System.out.println("Enter Email format: name@domain.com");
-                            String email = input.nextLine();
-                            Customer customer = hotelResource.getCustomer(email);
-                            System.out.println("What room number would you like to reserve?");
-                            String roomNumber = input.nextLine();
-                            IRoom room = hotelResource.getRoom(roomNumber);
-                            hotelResource.bookARoom(customer.getEmail(), room, checkInDate, checkOutDate);
-                        } else if (account.equals("n")){
-                            System.out.println("You have to create an account");
-                            this.createAccount();
-                        } else {
-                            System.out.println("Invalid input!");
-                        }
-                    } while (!account.equals("y") && !account.equals("n"));
-                } else if (book.equals("n")) {
+        try {
+            System.out.println("Enter CheckIn Date mm/dd/yyyy:");
+            Date checkInDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
+            System.out.println("Enter CheckOut Date mm/dd/yyyy:");
+            Date checkOutDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
+            Collection<IRoom> rooms = hotelResource.findARoom(checkInDate, checkOutDate);
+            if (!rooms.isEmpty()) {
+                do {
+                    System.out.println("Would you like to book a room? y/n");
+                    book = input.next().toLowerCase().trim();
+                    if (book.equals("y")) {
+                        do {
+                            System.out.println("Do you have an account with us? y/n");
+                            account = input.next().toLowerCase().trim();
+                            if (account.equals("y")) {
+                                System.out.println("Enter Email format: name@domain.com");
+                                String email = input.nextLine();
+                                Customer customer = hotelResource.getCustomer(email);
+                                System.out.println("What room number would you like to reserve?");
+                                String roomNumber = input.nextLine();
+                                IRoom room = hotelResource.getRoom(roomNumber);
+                                hotelResource.bookARoom(customer.getEmail(), room, checkInDate, checkOutDate);
+                            } else if (account.equals("n")){
+                                System.out.println("You have to create an account");
+                                this.createAccount();
+                            } else {
+                                System.out.println("Invalid input!");
+                            }
+                        } while (!account.equals("y") && !account.equals("n"));
+                    } else if (book.equals("n")) {
                         this.start();
-                } else {
-                    System.out.println("Invalid input!");
-                }
-            } while (!book.equals("y") && !book.equals("n"));
-        } else {
-            System.out.println("There is no room available");
-            return;
+                    } else {
+                        System.out.println("Invalid input!");
+                    }
+                } while (!book.equals("y") && !book.equals("n"));
+            } else {
+                System.out.println("There is no room available");
+                return;
+            }
+        } catch (ParseException ex) {
+            ex.printStackTrace();
         }
     }
 

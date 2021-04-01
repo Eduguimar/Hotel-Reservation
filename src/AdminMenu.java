@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminMenu {
-    static Scanner input;
+    final Scanner input;
     static AdminResource adminResource = AdminResource.getInstance();
 
     public AdminMenu() {
