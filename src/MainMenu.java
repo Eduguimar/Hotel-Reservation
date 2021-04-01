@@ -5,6 +5,7 @@ import model.Reservation;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Scanner;
@@ -16,48 +17,55 @@ public class MainMenu {
     public MainMenu() {
     }
 
-    private static void findAndReserveARoom() {
+    private static void findAndReserveARoom() throws ParseException {
         String book;
         String account;
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat date = new SimpleDateFormat("MM/dd/yyyy");
         input.nextLine();
         try {
             System.out.println("Enter CheckIn Date mm/dd/yyyy:");
+            Date todayDate = date.parse(date.format(calendar.getTime()));
             Date checkInDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
             System.out.println("Enter CheckOut Date mm/dd/yyyy:");
             Date checkOutDate = new SimpleDateFormat("MM/dd/yyyy").parse(input.nextLine());
-            Collection<IRoom> rooms = hotelResource.findARoom(checkInDate, checkOutDate);
-            if (!rooms.isEmpty()) {
-                do {
-                    System.out.println("Would you like to book a room? y/n");
-                    book = input.next().toLowerCase().trim();
-                    if (book.equals("y")) {
-                        do {
-                            System.out.println("Do you have an account with us? y/n");
-                            account = input.next().toLowerCase().trim();
-                            if (account.equals("y")) {
-                                System.out.println("Enter Email format: name@domain.com");
-                                String email = input.nextLine();
-                                Customer customer = hotelResource.getCustomer(email);
-                                System.out.println("What room number would you like to reserve?");
-                                String roomNumber = input.nextLine();
-                                IRoom room = hotelResource.getRoom(roomNumber);
-                                hotelResource.bookARoom(customer.getEmail(), room, checkInDate, checkOutDate);
-                            } else if (account.equals("n")){
-                                System.out.println("You have to create an account");
-                                createAccount();
-                            } else {
-                                System.out.println("Invalid input!");
-                            }
-                        } while (!account.equals("y") && !account.equals("n"));
-                    } else if (book.equals("n")) {
-                        start();
-                    } else {
-                        System.out.println("Invalid input!");
-                    }
-                } while (!book.equals("y") && !book.equals("n"));
+            if (!checkInDate.before(todayDate) && !checkOutDate.before(checkInDate)) {
+                Collection<IRoom> rooms = hotelResource.findARoom(checkInDate, checkOutDate);
+                if (!rooms.isEmpty()) {
+                    do {
+                        System.out.println("Would you like to book a room? y/n");
+                        book = input.next().toLowerCase().trim();
+                        if (book.equals("y")) {
+                            do {
+                                System.out.println("Do you have an account with us? y/n");
+                                account = input.next().toLowerCase().trim();
+                                if (account.equals("y")) {
+                                    System.out.println("Enter Email format: name@domain.com");
+                                    String email = input.nextLine();
+                                    Customer customer = hotelResource.getCustomer(email);
+                                    System.out.println("What room number would you like to reserve?");
+                                    String roomNumber = input.nextLine();
+                                    IRoom room = hotelResource.getRoom(roomNumber);
+                                    hotelResource.bookARoom(customer.getEmail(), room, checkInDate, checkOutDate);
+                                } else if (account.equals("n")) {
+                                    System.out.println("You have to create an account");
+                                    createAccount();
+                                } else {
+                                    System.out.println("Invalid input!");
+                                }
+                            } while (!account.equals("y") && !account.equals("n"));
+                        } else if (book.equals("n")) {
+                            start();
+                        } else {
+                            System.out.println("Invalid input!");
+                        }
+                    } while (!book.equals("y") && !book.equals("n"));
+                } else {
+                    System.out.println("There is no room available");
+                    return;
+                }
             } else {
-                System.out.println("There is no room available");
-                return;
+                System.out.println("Check in date needs to be from today onwards and check out date can not be before check in date");
             }
         } catch (ParseException ex) {
             ex.printStackTrace();
